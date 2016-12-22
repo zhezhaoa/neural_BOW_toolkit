@@ -13,14 +13,14 @@ import java.util.Map.Entry;
 import utils.Sample;
 
 public class AthR {
-	public static int gram = 2;
+	public static int ngram = 2;
 	public static int nb = 1;
 	public static int iter_num = 20;
 	public static int n = 500;
-	public static String data_file_path = "./datasets/AthR/"+ gram + "gram.txt";
+	public static String data_file_path = "./datasets/AthR/"+ ngram + "gram.txt";
 	public static String train_test_split = "./datasets/AthR/train_test_split.txt";
 	public static int [] train_test_split_index;
-	public static Map<String, ArrayList<Sample>> getDataset(String filePath) {
+	public static Map<String, ArrayList<Sample>> getDataset() {
 		Map<String, ArrayList<Sample>> dataset = new HashMap<String, ArrayList<Sample>>();
 		dataset.put("train", new ArrayList<Sample>());
 		dataset.put("test", new ArrayList<Sample>());
@@ -41,7 +41,7 @@ public class AthR {
 			reader.close();
 			
 			
-			File file = new File(filePath);
+			File file = new File(data_file_path);
 			reader = new BufferedReader(new FileReader(file));
 
 			int text_id;
