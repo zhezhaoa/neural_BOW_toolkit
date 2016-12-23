@@ -13,14 +13,17 @@ import java.util.Map.Entry;
 import utils.Sample;
 
 public class XGraph {
-	public static int gram = 2;
+	public static int ngram = 2;
 	public static int nb = 1;
 	public static int iter_num = 30;
-	public static int n = 500;
-	public static String data_file_path = "./datasets/XGraph/"+ gram + "gram.txt";
+	public static int n = 300;
+	public static int neg_size = 30;
+	public static int use_w2v = 1;
+	public static String data_file_path = "./datasets/XGraph/"+ ngram + "gram.txt";
+	public static String w2v_file = "./datasets/XGraph/w2v.txt";
 	public static String train_test_split = "./datasets/XGraph/train_test_split.txt";
 	public static int [] train_test_split_index;
-	public static Map<String, ArrayList<Sample>> getDataset(String filePath) {
+	public static Map<String, ArrayList<Sample>> getDataset() {
 		Map<String, ArrayList<Sample>> dataset = new HashMap<String, ArrayList<Sample>>();
 		dataset.put("train", new ArrayList<Sample>());
 		dataset.put("test", new ArrayList<Sample>());
@@ -41,7 +44,7 @@ public class XGraph {
 			reader.close();
 			
 			
-			File file = new File(filePath);
+			File file = new File(data_file_path);
 			reader = new BufferedReader(new FileReader(file));
 
 			int text_id;

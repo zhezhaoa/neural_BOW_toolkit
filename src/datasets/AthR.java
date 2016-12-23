@@ -16,8 +16,11 @@ public class AthR {
 	public static int ngram = 2;
 	public static int nb = 1;
 	public static int iter_num = 20;
-	public static int n = 500;
+	public static int n = 300;
+	public static int neg_size = 30;
+	public static int use_w2v = 1;
 	public static String data_file_path = "./datasets/AthR/"+ ngram + "gram.txt";
+	public static String w2v_file = "./datasets/AthR/w2v.txt";
 	public static String train_test_split = "./datasets/AthR/train_test_split.txt";
 	public static int [] train_test_split_index;
 	public static Map<String, ArrayList<Sample>> getDataset() {

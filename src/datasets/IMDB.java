@@ -13,12 +13,15 @@ import java.util.Map.Entry;
 import utils.Sample;
 
 public class IMDB {
-	public static int gram = 1;
+	public static int ngram = 1;
 	public static int nb = 0;
 	public static int iter_num = 20;
-	public static int n = 100;
+	public static int n = 300;
+	public static int neg_size = 5;
+	public static int use_w2v = 0;
 	public static int use_unlabelled = 0;
-	public static String data_file_path = "./datasets/IMDB/alldata-id_p" + gram + "gram.txt";
+	public static String data_file_path = "./datasets/IMDB/alldata-id_p" + ngram + "gram.txt";
+	public static String w2v_file = "./datasets/IMDB/w2v.txt";
 	public static Map<String, ArrayList<Sample>> getDataset() {
 		Map<String, ArrayList<Sample>> dataset = new HashMap<String, ArrayList<Sample>>();
 		dataset.put("train", new ArrayList<Sample>());

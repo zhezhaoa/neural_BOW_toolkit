@@ -13,12 +13,15 @@ import java.util.Map.Entry;
 import utils.Sample;
 
 public class RTs {
-	public static int gram = 2;
-	public static int nb = 1;
+	public static int ngram = 1;
+	public static int nb = 0;
 	public static int iter_num = 150;
-	public static int n = 100;
-	public static int use_unlabelled = 1;
-	public static String data_file_path = "./datasets/RTs/" + gram + "gram.txt";
+	public static int n = 300;
+	public static int neg_size = 5;
+	public static int use_w2v = 0;
+	public static int use_unlabelled = 0;
+	public static String data_file_path = "./datasets/RTs/" + ngram + "gram.txt";
+	public static String w2v_file = "./datasets/RTs/w2v.txt";
 	public static String train_test_split = null;
 	public static int [] train_test_split_index;
 	public static Map<String, ArrayList<Sample>> getDataset(int cv) {

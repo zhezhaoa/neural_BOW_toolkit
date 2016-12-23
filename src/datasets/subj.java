@@ -13,11 +13,12 @@ import java.util.Map.Entry;
 import utils.Sample;
 
 public class subj {
-	public static int gram = 2;
+	public static int ngram = 2;
 	public static int nb = 1;
 	public static int iter_num = 50;
 	public static int n = 300;
-	public static String data_file_path = "./datasets/subj/" + gram + "gram.txt";
+	public static int neg_size = 10;
+	public static String data_file_path = "./datasets/subj/" + ngram + "gram.txt";
 	public static Map<String, ArrayList<Sample>> getDataset(String filePath, int cv) {
 		Map<String, ArrayList<Sample>> dataset = new HashMap<String, ArrayList<Sample>>();
 		dataset.put("train", new ArrayList<Sample>());
