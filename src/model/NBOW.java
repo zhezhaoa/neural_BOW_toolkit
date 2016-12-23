@@ -1,7 +1,11 @@
 package model;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -10,9 +14,9 @@ import utils.*;
 
 //our model
 public class NBOW {
-	public static int use_imdb = 0;
+	public static int use_imdb = 1;
 	public static int use_rt2k = 0;
-	public static int use_rts = 1;
+	public static int use_rts = 0;
 	public static int use_subj = 0;
 	public static int use_athr = 0;
 	public static int use_xgraph = 0;
@@ -24,16 +28,18 @@ public class NBOW {
 	public static float lr = 0.025f; // learning rate
 	public static float original_lr = lr; // initialized learning rate
 	public static int neg_size = 5; // negative sampling size
-	public static int gram = 1;
+	public static int ngram = 1;
 	public static int iter_num = 20; // iteration number
-	public static int batch_size = 100;
-	public static int n = 100; // vector size for both words and documents
+	public static int batch_size = 10;
+	public static int n = 300; // vector size for both words and documents
 	public static int thread_num = 8;
 	public static String data_file_path = null;
 	public static int vocab_size; // vocabulary size
 	public static int texts_num; // the number of texts 
 	public static int cv_num = 10;
 	public static int nb = 1;
+	public static int use_w2v = 0;
+	public static String w2v_file = null;
 
 	public static float WE[][]; // word embeddings
 	public static float TE[][]; // text embeddings
@@ -54,6 +60,33 @@ public class NBOW {
 		for (int i = 0; i < texts_num; i++)
 			for (int j = 0; j < n; j++)
 				TE[i][j] = (random.nextFloat() - 0.5f) / n;
+		
+		if (use_w2v == 1){
+			File w2v = new File(w2v_file);
+			BufferedReader reader_w2v;
+			try {
+				reader_w2v = new BufferedReader(new FileReader(w2v));
+			    String line = null;
+			    int counter = 0;
+			    while ((line = reader_w2v.readLine()) != null) {
+			    	String[] line_array = line.split(" ");
+			    	if(Sample.id2count.get(Sample.word2id.get(line_array[0])) >= 1)
+			    	{
+			    	    for (int i=0;i<n;i++){
+			    			WE[Sample.word2id.get(line_array[0])][i] = Float.valueOf(line_array[i+1]);
+			    		}
+			    	}
+			    }
+		    } catch (FileNotFoundException e) {
+			e.printStackTrace();
+		    } catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
     
 
@@ -209,7 +242,7 @@ public class NBOW {
 
 	public static void printHyperParameter(){
 		System.out.println("Hyper-parameter setting");
-		System.out.println("N-gram: from 1 to " + gram);
+		System.out.println("N-gram: from 1 to " + ngram);
 		System.out.println("Embedding size (dimension): " + n);
 		System.out.println("Iteration number: " + iter_num);
 		System.out.println("The number of negative samples: " + neg_size);
@@ -218,19 +251,25 @@ public class NBOW {
 	}
 	public static void main(String args[]) {
 		if (use_imdb == 1){
-			gram = IMDB.gram;
+			ngram = IMDB.ngram;
 			iter_num = IMDB.iter_num;
 			nb = IMDB.nb;
 			n = IMDB.n;
+			neg_size = IMDB.neg_size;
+			w2v_file = IMDB.w2v_file;
+			use_w2v = IMDB.use_w2v;
 			dataset = IMDB.getDataset();
 			printHyperParameter();
 			trainAndTest();
 		}
 		if (use_rt2k == 1){
-			gram = RT2k.gram;
+			ngram = RT2k.ngram;
 			nb = RT2k.nb;
 			iter_num = RT2k.iter_num;
 			n = RT2k.n;
+			neg_size = RT2k.neg_size;
+			w2v_file = RT2k.w2v_file;
+			use_w2v = RT2k.use_w2v;
 			printHyperParameter();
 			double accuracy = 0;
 			double cv_accuracy = 0;
@@ -246,10 +285,13 @@ public class NBOW {
 			
 		}
 		if (use_rts == 1){
-			gram = RTs.gram;
+			ngram = RTs.ngram;
 			iter_num = RTs.iter_num;
 			nb = RTs.nb;
 			n = RTs.n;
+			neg_size = RTs.neg_size;
+			w2v_file = RTs.w2v_file;
+			use_w2v = RTs.use_w2v;
 			if (RTs.use_unlabelled == 1)
 				iter_num = 15;
 			printHyperParameter();
@@ -267,10 +309,11 @@ public class NBOW {
 		}
 		if (use_subj == 1){
 			data_file_path = subj.data_file_path;
-			gram = subj.gram;
+			ngram = subj.ngram;
 			iter_num = subj.iter_num;
 			nb = subj.nb;
 			n = subj.n;
+			neg_size = subj.neg_size;
 			printHyperParameter();
 			double accuracy = 0;
 			double cv_accuracy = 0;
@@ -285,40 +328,47 @@ public class NBOW {
 			System.out.println("Training finished");
 		}
 		if (use_athr == 1){
-			data_file_path = AthR.data_file_path;
-			gram = AthR.gram;
+			ngram = AthR.ngram;
 			iter_num = AthR.iter_num;
 			nb = AthR.nb;
 			n = AthR.n;
-			dataset = AthR.getDataset(data_file_path);
+			neg_size = AthR.neg_size;
+			w2v_file = AthR.w2v_file;
+			use_w2v = AthR.use_w2v;
+			dataset = AthR.getDataset();
 			printHyperParameter();
 			trainAndTest();
 		}
 		if (use_xgraph == 1){
-			data_file_path = XGraph.data_file_path;
-			gram = XGraph.gram;
+			ngram = XGraph.ngram;
 			iter_num = XGraph.iter_num;
 			nb = XGraph.nb;
 			n = XGraph.n;
-			dataset = XGraph.getDataset(data_file_path);
+			neg_size = XGraph.neg_size;
+			w2v_file = XGraph.w2v_file;
+			use_w2v = XGraph.use_w2v;
+			dataset = XGraph.getDataset();
 			printHyperParameter();
 			trainAndTest();
 		}
 		if (use_bbcrypt == 1){
-			data_file_path = BbCrypt.data_file_path;
-			gram = BbCrypt.gram;
+			ngram = BbCrypt.ngram;
 			iter_num = BbCrypt.iter_num;
 			nb = BbCrypt.nb;
 			n = BbCrypt.n;
-			dataset = BbCrypt.getDataset(data_file_path);
+			neg_size = BbCrypt.neg_size;
+			dataset = BbCrypt.getDataset();
 			printHyperParameter();
 			trainAndTest();
 		}
 		if (use_cr == 1){
-			gram = CR.gram;
+			ngram = CR.ngram;
 			nb = CR.nb;
 			iter_num = CR.iter_num;
 			n = CR.n;
+			neg_size = CR.neg_size;
+			w2v_file = CR.w2v_file;
+			use_w2v = CR.use_w2v;
 			printHyperParameter();
 			double accuracy = 0;
 			double cv_accuracy = 0;
@@ -333,10 +383,13 @@ public class NBOW {
 			System.out.println("Training finished");
 		}
 		if (use_mpqa == 1){
-			gram = MPQA.gram;
+			ngram = MPQA.ngram;
 			nb = MPQA.nb;
 			iter_num = MPQA.iter_num;
 			n = MPQA.n;
+			neg_size = MPQA.neg_size;
+			w2v_file = MPQA.w2v_file;
+			use_w2v = MPQA.use_w2v;
 			printHyperParameter();
 			double accuracy = 0;
 			double cv_accuracy = 0;
