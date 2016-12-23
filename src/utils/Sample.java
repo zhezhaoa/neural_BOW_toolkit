@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import model.NBOW;
+
 public class Sample {
 
 	public static Random random = new Random();
@@ -68,6 +70,30 @@ public class Sample {
 		for (int i=0; i<id2count.size();i++){
 			ratio.add((float) 1.0);
 		}
+		//float pos_neg_ratio = 1;
+		//if ( NBOW.use_cr == 1) 
+			//pos_neg_ratio = (float) (1368.0/2407.0);
+			
+		if ( NBOW.use_athr == 1 || NBOW.use_bbcrypt == 1 || NBOW.use_xgraph == 1){
+		    for (int i=0; i<id2count.size(); i++){
+			    if (id2count_pos.get(i)>id2count_neg.get(i)){
+				    ratio.set(i, (float) Math.log(((float)id2count_pos.get(i)+1)/(id2count_neg.get(i)+1)));
+			    }else{
+				    ratio.set(i, (float) Math.log(((float)id2count_neg.get(i)+1)/(id2count_pos.get(i)+1)));
+			    }
+		    }
+		} else {
+		    for (int i=0; i<id2count.size(); i++){
+			    if (id2count_pos.get(i)>id2count_neg.get(i)){
+				    ratio.set(i, (float) Math.sqrt(((float)id2count_pos.get(i)+1)/(id2count_neg.get(i)+1)));
+			    }else{
+				    ratio.set(i, (float) Math.sqrt(((float)id2count_neg.get(i)+1)/(id2count_pos.get(i)+1)));
+			    }
+		    }
+		}
+		
+		
+		/*
 		for (int i=0; i<id2count.size(); i++){
 			if (id2count_pos.get(i)>id2count_neg.get(i)){
 				ratio.set(i, (float) Math.sqrt(((float)id2count_pos.get(i)+1)/(id2count_neg.get(i)+1)));
@@ -75,6 +101,7 @@ public class Sample {
 				ratio.set(i, (float) Math.sqrt(((float)id2count_neg.get(i)+1)/(id2count_pos.get(i)+1)));
 			}
 		}
+		*/
 	}
 	
 
