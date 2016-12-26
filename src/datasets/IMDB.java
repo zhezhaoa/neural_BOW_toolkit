@@ -13,10 +13,10 @@ import java.util.Map.Entry;
 import utils.Sample;
 
 public class IMDB {
-	public static int ngram = 1;
-	public static int nb = 0;
-	public static int iter_num = 20;
-	public static int n = 300;
+	public static int ngram = 2;
+	public static int nb = 1;
+	public static int iter_num = 10;
+	public static int n = 100;
 	public static int neg_size = 5;
 	public static int use_w2v = 0;
 	public static int use_unlabelled = 0;
