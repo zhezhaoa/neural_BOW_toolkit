@@ -15,9 +15,9 @@ import utils.*;
 //our model
 public class NBOW {
 	public static int use_imdb = 1;
-	public static int use_rt2k = 0;
-	public static int use_rts = 0;
-	public static int use_subj = 0;
+	public static int use_rt2k = 1;
+	public static int use_rts = 1;
+	public static int use_subj = 1;
 	public static int use_athr = 0;
 	public static int use_xgraph = 0;
 	public static int use_bbcrypt = 0;
@@ -32,7 +32,7 @@ public class NBOW {
 	public static int iter_num = 20; // iteration number
 	public static int batch_size = 10;
 	public static int n = 300; // vector size for both words and documents
-	public static int thread_num = 8;
+	public static int thread_num = 12;
 	public static String data_file_path = null;
 	public static int vocab_size; // vocabulary size
 	public static int texts_num; // the number of texts 
@@ -178,7 +178,7 @@ public class NBOW {
 						break;
 				}
 			}
-			System.out.println(" ||" + " training time:" + (System.currentTimeMillis() - startTime)/1000 + "s");
+			System.out.println(" ||" + " training time:" + (System.currentTimeMillis() - startTime)/(float)1000 + "s");
 			if (iter <= iter_num - 1) {
 			    try {
 				    FileWriter fw_train = new FileWriter("./liblinear/" + "train.txt");
@@ -293,7 +293,7 @@ public class NBOW {
 			w2v_file = RTs.w2v_file;
 			use_w2v = RTs.use_w2v;
 			if (RTs.use_unlabelled == 1)
-				iter_num = 15;
+				iter_num = 20;
 			printHyperParameter();
 			double accuracy = 0;
 			double cv_accuracy = 0;
@@ -314,6 +314,8 @@ public class NBOW {
 			nb = subj.nb;
 			n = subj.n;
 			neg_size = subj.neg_size;
+			w2v_file = RTs.w2v_file;
+			use_w2v = RTs.use_w2v;
 			printHyperParameter();
 			double accuracy = 0;
 			double cv_accuracy = 0;
