@@ -1,10 +1,10 @@
 # neural_BOW_toolkit
 
 The code implements the neural bag-of-words models proposed in coling 2016: 
-[Weighted Neural Bag-of-n-grams Model: New Baselines for Text Classification] (http://www.aclweb.org/anthology/C/C16/C16-1150.pdf)
+[Weighted Neural Bag-of-n-grams Model: New Baselines for Text Classification] (http://www.aclweb.org/anthology/C/C16/C16-1150.pdf).
+This toolkit achieves state-of-the-art results on a range text classification and sentiment analysis tasks. We think this toolkit is a good start point for NLP beginners. Also, we recommend to use this toolkit on real-world challenges since it is much more efficient compared with complex deep neural models.
 
 ## project
-We will upload the code and the datasets continually in the following weeks.
 Our project include three components: (1) the datasets: nine binary classification datasets (2) liblinear: logistic regression (3) src: including entire source code
 
 ## datasets
